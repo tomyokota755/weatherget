@@ -8,14 +8,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: # ここに権限設定を明示的に追加しました
+      contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4 # 最新版 v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5 # 最新版 v5
         with:
-          python-version: '3.9'
+          python-version: '3.11' # 安定したバージョンを指定
 
       - name: Install dependencies
         run: pip install requests
@@ -27,6 +29,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add forecasts/
-          git commit -m "Auto-update forecasts" || echo "No changes"
+          git add forecasts/ || echo "No forecasts folder yet"
+          git commit -m "Auto-update forecasts" || echo "No changes to commit"
           git push
