@@ -16,15 +16,15 @@ def fetch_and_cleanup():
     
     # フォルダ維持用の隠しファイル
     with open(os.path.join(SAVE_DIR, ".gitkeep"), "w") as f:
-        f.write("keep")
+        f.write("folder keep")
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M")
     print(f"--- Salvage Mission Started at {timestamp} ---")
     
     success_count = 0
     for icao in TARGET_AIRPORTS:
-        # 正しいURLプレフィックス: QMCD98_
-        url = f"https://www.data.jma.go.jp/airinfo/data/png/QMCD98_{icao}.png"
+        # 正解のURL構造: /pict/taf/QMCD98_{icao}.png
+        url = f"https://www.data.jma.go.jp/airinfo/data/pict/taf/QMCD98_{icao}.png"
         
         try:
             print(f"Checking {icao}...")
@@ -38,7 +38,7 @@ def fetch_and_cleanup():
                 print(f"  [SUCCESS] {icao} saved.")
                 success_count += 1
             else:
-                print(f"  [FAILED] {icao} (Status: {res.status_code}) - URL: {url}")
+                print(f"  [FAILED] {icao} (Status: {res.status_code})")
         except Exception as e:
             print(f"  [ERROR] {icao}: {e}")
 
