@@ -29,6 +29,13 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add forecasts/ || echo "No changes"
-          git commit -m "Auto-update forecasts" || echo "No changes to commit"
-          git push
+          # 最新の状態を一度取り込む（競合回避）
+          git pull --rebase origin main
+          git add forecasts/
+          # 変更がある場合のみコミット
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-update forecasts"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
