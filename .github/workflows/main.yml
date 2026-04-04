@@ -1,0 +1,32 @@
+name: Aviation Forecast Salvage
+
+on:
+  schedule:
+    - cron: '30 0,6,12,18 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run salvage script
+        run: python fetch_forecasts.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add forecasts/
+          git commit -m "Auto-update forecasts" || echo "No changes"
+          git push
