@@ -2,41 +2,49 @@ import os
 import requests
 from datetime import datetime, timedelta
 
-TARGET_AIRPORTS = ["RJTT", "RJAA", "RJCC", "RJFF", "ROAH", "RJOA", "RJOT", "RJSA", "RJSK", "RJFK", "RORS"]
+# 1. 重点11空港 + 予備
+TARGET_AIRPORTS = ["RJTT", "RJAA", "RJCC", "RJFF", "ROAH", "RJOA", "RJOT", "RJSA", "RJSK", "RJFK", "RORS", "RJFG"]
 SAVE_DIR = "forecasts"
 RETENTION_DAYS = 4
 
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Referer': 'https://www.data.jma.go.jp/airinfo/data/awfo_taf.html'
+}
+
 def fetch_and_cleanup():
-    if not os.path.exists(SAVE_DIR):
-        os.makedirs(SAVE_DIR)
+    # フォルダを確実に作成
+    os.makedirs(SAVE_DIR, exist_ok=True)
+    
+    # フォルダを強制的にGitに認識させるための目印
+    with open(os.path.join(SAVE_DIR, ".gitkeep"), "w") as f:
+        f.write("folder keep")
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M")
-    print(f"Starting fetch at {timestamp}...")
+    print(f"--- Salvage Mission Started at {timestamp} ---")
+    print(f"Targeting {len(TARGET_AIRPORTS)} airports: {', '.join(TARGET_AIRPORTS)}")
     
+    success_count = 0
     for icao in TARGET_AIRPORTS:
+        # 気象庁の画像URL
         url = f"https://www.data.jma.go.jp/airinfo/data/png/AWFO_{icao}.png"
+        
         try:
-            res = requests.get(url, timeout=15)
+            print(f"Checking {icao}...")
+            res = requests.get(url, headers=HEADERS, timeout=20)
+            
             if res.status_code == 200:
-                with open(f"{SAVE_DIR}/{icao}_{timestamp}.png", "wb") as f:
+                filename = f"{icao}_{timestamp}.png"
+                with open(os.path.join(SAVE_DIR, filename), "wb") as f:
                     f.write(res.content)
-                print(f" Saved: {icao}")
+                print(f"  [SUCCESS] {icao} saved.")
+                success_count += 1
+            else:
+                print(f"  [FAILED] {icao} returned status code: {res.status_code}")
         except Exception as e:
-            print(f" Error {icao}: {e}")
+            print(f"  [ERROR] {icao} failed with error: {e}")
 
-    now = datetime.now()
-    cutoff = now - timedelta(days=RETENTION_DAYS)
-    for filename in os.listdir(SAVE_DIR):
-        try:
-            parts = filename.split('_')
-            if len(parts) < 3: continue
-            file_date_str = f"{parts[1]}_{parts[2].split('.')[0]}"
-            file_date = datetime.strptime(file_date_str, "%Y%m%d_%H%M")
-            if file_date < cutoff:
-                os.remove(os.path.join(SAVE_DIR, filename))
-                print(f" Purged: {filename}")
-        except Exception as e:
-            print(f" Skip purge for {filename}: {e}")
+    print(f"--- Mission Finished. Total Saved: {success_count} ---")
 
 if __name__ == "__main__":
     fetch_and_cleanup()
