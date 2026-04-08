@@ -11,18 +11,31 @@ BASE_DIR = "."
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
-
-# 日本国内の主要・地方空港（TAF/METAR発行箇所を網羅）
+# 日本国内のMETAR/TAF発行官署（軍民含む完全版リスト）
 AIRPORTS_ALL = [
-    "RJAA", "RJTT", "RJBB", "RJCC", "RJFF", "RJGG", "ROAH", "RJOO", "RJSN", "RJNK",
-    "RJNT", "RJNW", "RJNS", "RJNY", "RJNA", "RJNB", "RJNC", "RJNE", "RJNG", "RJNH",
-    "RJNI", "RJNJ", "RJNL", "RJNM", "RJNN", "RJNO", "RJNP", "RJNQ", "RJNR", "RJNU", 
-    "RJNV", "RJNX", "RJNZ", "RJOA", "RJOB", "RJOC", "RJOD", "RJOE", "RJOF", "RJOG", 
-    "RJOH", "RJOI", "RJOJ", "RJOK", "RJOM", "RJON", "RJOP", "RJOQ", "RJOR", "RJOS", 
-    "RJOT", "RJOU", "RJOV", "RJOW", "RJOY", "RJOZ", "RJSA", "RJSB", "RJSC", "RJSD", 
-    "RJSE", "RJSF", "RJSG", "RJSH", "RJSI", "RJSJ", "RJSK", "RJSL", "RJSM", "RJSN", 
-    "RJSO", "RJSP", "RJSQ", "RJSR", "RJSS", "RJSY", "RJTO", "RODN", "ROIG", "ROKJ", 
-    "ROMY", "RORS", "ROTM", "ROYN", "RJTY", "RJTF", "RJTI", "RJCJ"
+    # --- 北海道 ---
+    "RJCC", "RJCH", "RJEC", "RJCW", "RJCK", "RJCM", "RJCB", "RJCN", "RJCO", "RJCJ", 
+    "RJEB", "RJER", "RJEO", "RJCT",
+    # --- 東北 ---
+    "RJSA", "RJSM", "RJSK", "RJSC", "RJSN", "RJSS", "RJSF", "RJSI", "RJSR",
+    # --- 関東・甲信越 ---
+    "RJTT", "RJAA", "RJTY", "RJTF", "RJTO", "RJTH", "RJAH", "RJAF", "RJAN", "RJAZ", 
+    "RJTR", "RJAL", "RJAK",
+    # --- 中部 ---
+    "RJGG", "RJNK", "RJNT", "RJNS", "RJNW", "RJNA", "RJNG", "RJNH", "RJNY", "RJNF",
+    # --- 近畿 ---
+    "RJBB", "RJOO", "RJBE", "RJOY", "RJBD", "RJBK", "RJBT",
+    # --- 中国 ---
+    "RJOA", "RJOB", "RJDC", "RJOC", "RJOH", "RJOI", "RJOR", "RJOW", "RJOZ", "RJOF",
+    # --- 四国 ---
+    "RJOK", "RJOM", "RJOT", "RJOS",
+    # --- 九州 ---
+    "RJFF", "RJFK", "RJFM", "RJFT", "RJFU", "RJFO", "RJFR", "RJFS", "RJFE", "RJFC", 
+    "RJFA", "RJFN", "RJFY", "RJFZ", "RJFG", "RJDU",
+    # --- 沖縄・先島諸島 ---
+    "ROAH", "RODN", "RORS", "ROMY", "ROIG", "ROYN", "ROMD", "ROKJ", "ROTM", "ROKR",
+    # --- その他・ヘリポート等 ---
+    "RJTI", "RJAM", "RJAW"
 ]
 
 # 取得する専門天気図の種類
